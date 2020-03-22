@@ -41,3 +41,16 @@ print("Message sent")
 time.sleep(60)
 while not GPIO.input(17):
     pass
+
+# Function to run when motion detected
+PIN_LED = 24
+counter = 0
+def detectMotionSensor(channel):
+    GPIO.output(PIN_LED, GPIO.LOW)
+    if GPIO.input(17):     # True = Rising
+        global counter
+        counter += 1
+        times = datetime.datetime.now()
+        GPIO.output(PIN_LED, GPIO.HIGH)
+        print("Motion Detected: " + str(counter))
+        print("Time: " + str(times))
