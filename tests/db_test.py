@@ -1,10 +1,9 @@
 import os
 import pytest
-import unittest
-testdir = os.path.dirname(__file__)
-
-import flaskblog
-from flaskblog import db
+import secrets
+from datetime import datetime
+from flaskblog import db, login_manager
+from flask_login import UserMixin
 
 
 class MyTest(TestCase):
