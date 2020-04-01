@@ -1,9 +1,9 @@
-from flaskblog import app
 import flaskblog.forms as form
-import flaskblog.models as model
-import flaskblog.routes as route
 import unittest
-import json
+import unittest
+
+import flaskblog.forms as form
+
 
 class FlaskBlogTests(unittest.TestCase):
  #test if registeration form works correctly 

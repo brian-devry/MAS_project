@@ -1,9 +1,4 @@
-import os
-import pytest
-import secrets
-from datetime import datetime
-from flaskblog import db, login_manager
-from flask_login import UserMixin
+from flaskblog import db
 
 
 class MyTest(TestCase):
