@@ -16,3 +16,4 @@ class Config(object):
     LANGUAGES = ['en']#, 'es']
     POSTS_PER_PAGE = 25
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
+    FLASK_DEBUG=1
