@@ -92,6 +92,33 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(f3, [p3, p4])
         self.assertEqual(f4, [p4])
 
+    def test_post(self):
+        now = datetime.utcnow()
+        testuser = User(username='test', email='test@example.com')
+        testpost = Post(body="test post from test user", author=testuser, timestamp=now + timedelta(seconds=1))
+        db.session.add(testuser)
+        db.session.add(testpost)
+        db.session.commit()
+        self.assertEqual(testpost.body,"test post from test user")
+        self.assertEqual(testpost.author, testuser)
+
+    def test_edit_profile(self):
+        #original user 
+        user_edit_profile = User(username = "originaluser", about_me = "")
+        db.session.add(user_edit_profile)
+        db.session.commit()
+
+        #user goes to update profile 
+        user_edit_profile.username="testedit"
+        user_edit_profile.about_me = "test about me functionality"
+        db.session.add(user_edit_profile)
+        db.session.commit()
+        
+        #test to see if the user's username has been updated 
+        self.assertEqual(user_edit_profile.username, "testedit")
+        self.assertNotEqual(user_edit_profile.username, "originaluser")
+        self.assertNotEqual(user_edit_profile.about_me, "")
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
