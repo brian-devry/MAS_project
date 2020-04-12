@@ -22,6 +22,13 @@ def before_request():
 
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/monitor')
+def monitor():
+    return render_template('monitor.html', title=_('Monitor'))
+
+
+
+
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -204,3 +211,6 @@ def translate_text():
     return jsonify({'text': translate(request.form['text'],
                                       request.form['source_language'],
                                       request.form['dest_language'])})
+
+
+
