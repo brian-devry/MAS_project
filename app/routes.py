@@ -7,7 +7,7 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
-    ResetPasswordRequestForm, ResetPasswordForm
+    ResetPasswordRequestForm, ResetPasswordForm, AddSensorForm
 from app.models import User, Post
 from app.email import send_password_reset_email
 from app.translate import translate
@@ -204,6 +204,16 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
+@app.route('/addSensor', methods = ['GET', 'POST'])
+@login_required
+def addSensor():
+    form = AddSensorForm()
+    if form.validate_on_submit():
+        flash(_('Your sensor has been added!'))
+        return render_template('addSensor.html', title=_('Add Sensor'))
+    else:
+        flash('All fields are required.')
+        return render_template('addSensor.html', form = form)
 
 @app.route('/translate', methods=['POST'])
 @login_required
