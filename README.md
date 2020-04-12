@@ -3,4 +3,7 @@
 This is an example application featured in my [Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world). See the tutorial for instructions on how to work with it.
 
 to activate the virtual environment in Windows:
-venv\Scripts\activate
+'venv\Scripts\activate'
+
+To set debug mode for auto-restart on file changes, etc:
+on Windows 'set FLASK_DEBUG=1' once in the virtual environment
