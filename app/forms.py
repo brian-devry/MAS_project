@@ -77,7 +77,3 @@ class AddSensorForm(FlaskForm):
         'Sensor Configuration',
         choices=[('','Select your Sensor Configuration'),('True','True'),('False','False')]
     )
-    #RadioField('Sensor Configuration', choices=[('True','True'),('False','False')])
-    #RadioField(_l('Sensor Configuration'), choices = [(True,'True'),(False,'False')])
-    #Will add the submit button later since there is no database now
-    #submit = SubmitField(_l('Add Sensor'))
