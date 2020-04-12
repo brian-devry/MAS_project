@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField
+    TextAreaField, IntegerField, RadioField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from flask_babel import _, lazy_gettext as _l
@@ -67,3 +67,17 @@ class EditProfileForm(FlaskForm):
 class PostForm(FlaskForm):
     post = TextAreaField(_l('Say something'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
+
+class AddSensorForm(FlaskForm):
+    sensorID = IntegerField(_l('Input a Sensor ID'),
+                           validators=[DataRequired()])
+    sensorType = StringField(_l('Input your sensor type'),
+                        validators=[DataRequired(), Length(min=0, max=50)])
+    sensorConfig = SelectField(
+        'Sensor Configuration',
+        choices=[('','Select your Sensor Configuration'),('True','True'),('False','False')]
+    )
+    #RadioField('Sensor Configuration', choices=[('True','True'),('False','False')])
+    #RadioField(_l('Sensor Configuration'), choices = [(True,'True'),(False,'False')])
+    #Will add the submit button later since there is no database now
+    #submit = SubmitField(_l('Add Sensor'))
