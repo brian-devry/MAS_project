@@ -8,9 +8,10 @@ from guess_language import guess_language
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm, AddSensorForm
-from app.models import User, Post
+from app.models import User, Post, Sensor
 from app.email import send_password_reset_email
 from app.translate import translate
+from flask_table import table
 
 
 @app.before_request
@@ -24,7 +25,13 @@ def before_request():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/monitor')
 def monitor():
-    return render_template('monitor.html', title=_('Monitor'))
+    sensors = Sensor.query.all()
+    return render_template('monitor.html', title=_('Monitor'), sensors = sensors)
+
+
+
+
+
 
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
