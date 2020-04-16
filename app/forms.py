@@ -69,11 +69,13 @@ class PostForm(FlaskForm):
     submit = SubmitField(_l('Submit'))
 
 class AddSensorForm(FlaskForm):
-    sensorID = IntegerField(_l('Input a Sensor ID'),
+    sensorID = IntegerField(_l('Input a Sensor Name'),
                            validators=[DataRequired()])
-    sensorType = StringField(_l('Input your sensor type'),
-                        validators=[DataRequired(), Length(min=0, max=50)])
-    sensorConfig = SelectField(
-        'Sensor Configuration',
-        choices=[('','Select your Sensor Configuration'),('True','True'),('False','False')]
+    sensorAlarmValue = IntegerField(_l('Input a Sensor Value'),
+                           validators=[DataRequired()])
+    sensorType = SelectField(
+        'Sensor Type',
+        choices=[('','Select which type of sensor this is'),('1','Smoke'),('2','Monoxide'),('3','Static'),('4','Heat')]
     )
+
+    submit = SubmitField(_l('Submit'))
