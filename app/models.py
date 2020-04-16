@@ -5,13 +5,27 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from app import app, db, login
-
+from flask_table import Table, Col
 
 followers = db.Table(
     'followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
+
+
+
+class Sensor(db.Model):
+    #__tablename__ = 'sensor'
+    sensorID = db.Column(db.Integer, nullable = False, primary_key = True)
+    sensorName = db.Column(db.String, nullable = False)
+    sensorAlarmValue = db.Column(db.Integer, nullable = False)
+    sensorClass = db.Column(db.Integer, nullable = False)
+    
+    def __repr__(self): 
+        return '{}'.format(self.sensorID)
+
+
 
 
 class User(UserMixin, db.Model):
