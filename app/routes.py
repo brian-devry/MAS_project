@@ -205,11 +205,14 @@ def unfollow(username):
 def addSensor():
     form = AddSensorForm()
     if form.validate_on_submit():
+        sensor = Sensor(sensorID=form.sensorID.data, sensorName=form.sensorName.data,
+        sensorAlarmValue=form.sensorAlarmValue.data, sensorClass=form.sensorClass.data)
+        db.session.add(sensor)
+        db.session.commit()
         flash(_('Your sensor has been added!'))
-        return render_template('addSensor.html', title=_('Add Sensor'))
-    else:
-        flash('All fields are required.')
-        return render_template('addSensor.html', form = form)
+        return redirect(url_for('monitor'))
+    return render_template('addSensor.html', title=_('Add Sensor'), form=form)
+
 
 @app.route('/translate', methods=['POST'])
 @login_required
