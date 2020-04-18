@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from flask_babel import _, lazy_gettext as _l
-from app.models import User
+from app.models import User, Sensor
 
 
 class LoginForm(FlaskForm):
@@ -69,13 +69,22 @@ class PostForm(FlaskForm):
     submit = SubmitField(_l('Submit'))
 
 class AddSensorForm(FlaskForm):
-    sensorID = IntegerField(_l('Input a Sensor Name'),
+    sensorID = IntegerField(_l('Input a SensorID'), validators=[DataRequired()])
+    sensorName = StringField(_l('Input a Sensor Name'),
                            validators=[DataRequired()])
-    sensorAlarmValue = IntegerField(_l('Input a Sensor Value'),
-                           validators=[DataRequired()])
-    sensorType = SelectField(
+    sensorAlarmValue = IntegerField(_l('Input a Sensor Value'))
+    sensorClass = SelectField(
         'Sensor Type',
         choices=[('','Select which type of sensor this is'),('1','Smoke'),('2','Monoxide'),('3','Static'),('4','Heat')]
     )
+    submit = SubmitField(_l('Add Sensor'))
 
-    submit = SubmitField(_l('Submit'))
+    def validate_sensorID(self, sensorID):
+        sensor = Sensor.query.filter_by(sensorID=sensorID.data).first()
+        if sensor is not None:
+            raise ValidationError(_('Please choose a different sensorID'))
+
+    def validate_sensor(self, sensorName):
+        sensor = Sensor.query.filter_by(sensorName=sensorName.data).first()
+        if sensor is not None:
+            raise ValidationError(_('Please choose a different sensorName'))
