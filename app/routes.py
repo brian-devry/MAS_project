@@ -7,7 +7,7 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
-    ResetPasswordRequestForm, ResetPasswordForm, AddSensorForm
+    ResetPasswordRequestForm, ResetPasswordForm, AddSensorForm, EditSensorForm
 from app.models import User, Post, Sensor
 from app.email import send_password_reset_email
 from app.translate import translate
@@ -59,10 +59,10 @@ def index():
                            prev_url=prev_url)
 
 
-@app.route('/configuration')
-@login_required
-def configuration():
-    return render_template('configuration.html', title=_('System Configuration'))
+# @app.route('/configuration')
+# @login_required
+# def configuration():
+#     return render_template('configuration.html', title=_('System Configuration'))
 
 
 
@@ -166,6 +166,22 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title=_('Edit Profile'),
+                           form=form)
+
+@app.route('/configuration', methods=['GET', 'POST'])
+@login_required
+def configuration():
+    form = EditSensorForm()
+    if form.validate_on_submit():
+        sensor = Sensor(sensorID=form.sensorID.data, sensorName=form.sensorName.data,
+            sensorAlarmValue=form.sensorAlarmValue.data, sensorClass=form.sensorClass.data)
+        db.session.commit()
+        flash(_('Your changes have been saved.'))
+        return redirect(url_for('configuration'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.about_me.data = current_user.about_me
+    return render_template('configuration.html', title=_('Configuration'),
                            form=form)
 
 
