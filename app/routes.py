@@ -26,6 +26,11 @@ def before_request():
 @app.route('/monitor')
 def monitor():
     sensors = Sensor.query.all()
+    for s in sensors:
+        if s.sensorAlarmValue > 0:
+            s.sensorAlarmValue = "Alarm"
+        else:
+            s.sensorAlarmValue = "Ready"
     return render_template('monitor.html', title=_('Monitor'), sensors = sensors)
 
 
@@ -172,7 +177,7 @@ def edit_profile():
 @login_required
 def configuration():
     sensors = Sensor.query.all()
-    return render_template('mainConfig.html', title=_('Configuration'), sensors = sensors)
+    return render_template('mainConfig.html', title=_('Sensor Configuration'), sensors = sensors)
   
 @app.route('/edit_Sensor/<int:id>', methods=['GET', 'POST'])
 @login_required
