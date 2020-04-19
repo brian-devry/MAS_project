@@ -88,3 +88,17 @@ class AddSensorForm(FlaskForm):
         sensor = Sensor.query.filter_by(sensorName=sensorName.data).first()
         if sensor is not None:
             raise ValidationError(_('Please choose a different sensorName'))
+
+
+class EditSensorForm(FlaskForm):
+    sensorID = IntegerField(_l('Input a Sensor ID'), validators=[DataRequired()])
+    sensorName = StringField(_l('Input a Sensor Name'),
+                           validators=[DataRequired()])
+    sensorAlarmValue = IntegerField(_l('Input a Sensor Value'))
+    sensorClass = SelectField(
+        'Sensor Type',
+        choices=[('','Select which type of sensor this is'),('1','Smoke'),('2','Monoxide'),('3','Static'),('4','Heat')]
+    )
+    submit = SubmitField(_l('Update Sensor'))
+
+   

@@ -7,7 +7,7 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
-    ResetPasswordRequestForm, ResetPasswordForm, AddSensorForm
+    ResetPasswordRequestForm, ResetPasswordForm, AddSensorForm, EditSensorForm
 from app.models import User, Post, Sensor
 from app.email import send_password_reset_email
 from app.translate import translate
@@ -59,10 +59,10 @@ def index():
                            prev_url=prev_url)
 
 
-@app.route('/configuration')
-@login_required
-def configuration():
-    return render_template('configuration.html', title=_('System Configuration'))
+# @app.route('/configuration')
+# @login_required
+# def configuration():
+#     return render_template('configuration.html', title=_('System Configuration'))
 
 
 
@@ -167,6 +167,49 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title=_('Edit Profile'),
                            form=form)
+
+@app.route('/configuration', methods=['GET', 'POST'])
+@login_required
+def configuration():
+    sensors = Sensor.query.all()
+    return render_template('mainConfig.html', title=_('Configuration'), sensors = sensors)
+  
+@app.route('/edit_Sensor/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_Sensor(id):
+
+    sensor = Sensor.query.filter_by(sensorID = id).first()
+    form = EditSensorForm()
+    
+    
+    #PrePopulate Edit form fields
+    form.sensorID.data = sensor.sensorID
+    form.sensorName.data = sensor.sensorName
+    form.sensorAlarmValue.data = sensor.sensorAlarmValue
+    form.sensorClass.process_data(sensor.sensorClass)
+
+    if form.validate_on_submit(): 
+        #Update sensor
+        sensor = Sensor.query.filter_by(sensorID = id).first()
+        sensor.sensorID = request.form['sensorID']
+        sensor.sensorName = request.form['sensorName']
+        sensor.sensorAlarmValue = request.form['sensorAlarmValue']
+        sensor.sensorClass = request.form['sensorClass']
+        db.session.commit()
+
+        flash(_('Sensor has been updated successfully!'))
+        return redirect(url_for('configuration'))
+    return render_template('edit_sensor.html', form=form)
+
+@app.route('/delete_sensor/<int:id>', methods=['POST'])
+@login_required
+def delete_sensor(id):
+    #Deleting Sensor
+    sensor = Sensor.query.filter_by(sensorID = id).first()
+    db.session.delete(sensor)
+    db.session.commit()
+    flash('Sensor has been deleted successfully!', 'success')
+    return redirect(url_for('configuration'))
 
 
 @app.route('/follow/<username>')
