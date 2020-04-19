@@ -15,6 +15,7 @@ from flask_table import Table, Col
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
+SQLALCHEMY_ECHO = True
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'

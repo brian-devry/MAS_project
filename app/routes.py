@@ -171,18 +171,45 @@ def edit_profile():
 @app.route('/configuration', methods=['GET', 'POST'])
 @login_required
 def configuration():
+    sensors = Sensor.query.all()
+    return render_template('mainConfig.html', title=_('Configuration'), sensors = sensors)
+  
+@app.route('/edit_Sensor/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_Sensor(id):
+
+    sensor = Sensor.query.filter_by(sensorID = id).first()
     form = EditSensorForm()
-    if form.validate_on_submit():
-        sensor = Sensor(sensorID=form.sensorID.data, sensorName=form.sensorName.data,
-            sensorAlarmValue=form.sensorAlarmValue.data, sensorClass=form.sensorClass.data)
+    
+    
+    #PrePopulate Edit form fields
+    form.sensorID.data = sensor.sensorID
+    form.sensorName.data = sensor.sensorName
+    form.sensorAlarmValue.data = sensor.sensorAlarmValue
+    form.sensorClass.process_data(sensor.sensorClass)
+
+    if form.validate_on_submit(): 
+        #Update sensor
+        sensor = Sensor.query.filter_by(sensorID = id).first()
+        sensor.sensorID = request.form['sensorID']
+        sensor.sensorName = request.form['sensorName']
+        sensor.sensorAlarmValue = request.form['sensorAlarmValue']
+        sensor.sensorClass = request.form['sensorClass']
         db.session.commit()
-        flash(_('Your changes have been saved.'))
+
+        flash(_('Sensor has been updated successfully!'))
         return redirect(url_for('configuration'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.about_me.data = current_user.about_me
-    return render_template('configuration.html', title=_('Configuration'),
-                           form=form)
+    return render_template('edit_sensor.html', form=form)
+
+@app.route('/delete_sensor/<int:id>', methods=['POST'])
+@login_required
+def delete_sensor(id):
+    #Deleting Sensor
+    sensor = Sensor.query.filter_by(sensorID = id).first()
+    db.session.delete(sensor)
+    db.session.commit()
+    flash('Sensor has been deleted successfully!', 'success')
+    return redirect(url_for('configuration'))
 
 
 @app.route('/follow/<username>')

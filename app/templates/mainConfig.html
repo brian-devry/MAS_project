@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<h2 class="sub-header">Sensor Overview</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                      <th>Sensor ID</th>
+                      <th>Sensor Name</th>
+                      <th>Sensor Alarm Value</th>
+                      <th>Sensor Class</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sensor in sensors %}
+                        <tr>
+                            <td>{{ sensor.sensorID }}</td>   
+                            <td>{{ sensor.sensorName }}</td>   
+                            <td>{{ sensor.sensorAlarmValue }}</td>   
+                            <td>{{ sensor.sensorClass }}</td>
+                            <td><a href="edit_Sensor/{{sensor.sensorID}}" class="btn btn-default pull-right">Edit</a></td>
+        <td>
+          <form action="{{url_for('delete_sensor', id=sensor.sensorID)}}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Delete" class="btn btn-danger">
+          </form>
+        </td>
+                        </tr>
+                    {% endfor %}
+                <tbody>
+            </table>
+        </div>
+{% endblock %}

@@ -1,14 +1,36 @@
 {% extends "base.html" %}
-
+<script src="static/js/lib/jquery.js"></script>
 {% block app_content %}
     <h1>{{ _('Megacorp Springfield MAS System') }}</h1>
     <h2>{{ _('CONFIGURE') }}</h2>
-    <p>{{ _('Smoke 1: Good') }}</p>
-    <p>{{ _('Smoke 2: Good') }}</p>
-    <p>{{ _('Smoke 3: Good') }}</p>
-    <p>{{ _('Monoxide 1: Good') }}</p>
-    <p>{{ _('Monoxide 2: Good') }}</p>
-    <p>{{ _('Static 1: Good') }}</p>
-    <p>{{ _('Static 2: Good') }}</p>
-    <p>{{ _('Heat 1: Good') }}</p>
+    <div id="sensors">
+        <form method="POST" action="">
+            <div class="form-group">
+              {{ render_field(sensor.sensorID, class_="form-control", readonly) }}
+            </div>
+            <div class="form-group">
+              {{ render_field(sensor.sensorName, class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ render_field(sensor.sensorAlarmValue, class_="form-control") }}
+              </div>
+              <div class="form-group">
+                {{ render_field(sensor.sensorClass, class_="form-control") }}
+              </div>
+            <p><input class="btn btn-primary" type="submit" value="Submit">
+          </form>
+    </div>>
+
+    <script>
+        $(document).ready(function(){
+    $('#sensors').on('change', function() {
+        let sensorID = $(this).val();
+
+        fetch('/selected_Sensor/' + selectedSensor).then(function(data) {
+            // this console.log is me testing to see what data returns
+            //console.log(sensorID, data, data.room_id, data.room, data.rooms);
+        });
+    });
+});
+    </script>
 {% endblock %}
