@@ -13,8 +13,6 @@ followers = db.Table(
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
-
-
 class Sensor(db.Model):
     #__tablename__ = 'sensor'
     sensorID = db.Column(db.Integer, nullable = False, primary_key = True)
@@ -24,9 +22,6 @@ class Sensor(db.Model):
     
     def __repr__(self): 
         return '{}'.format(self.sensorID)
-
-
-
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

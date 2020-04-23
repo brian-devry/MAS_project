@@ -35,9 +35,6 @@ def monitor():
 
 
 
-
-
-
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -62,13 +59,6 @@ def index():
     return render_template('index.html', title=_('Home'), form=form,
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
-
-
-# @app.route('/configuration')
-# @login_required
-# def configuration():
-#     return render_template('configuration.html', title=_('System Configuration'))
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
