@@ -9,7 +9,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm, AddSensorForm, EditSensorForm
 from app.models import User, Post, Sensor
-from app.email import send_password_reset_email
+from app.email import send_password_reset_email, send_sensor_trigger_email
 from app.translate import translate
 from flask_table import table
 
@@ -191,7 +191,9 @@ def edit_Sensor(id):
         sensor.sensorAlarmValue = request.form['sensorAlarmValue']
         sensor.sensorClass = request.form['sensorClass']
         db.session.commit()
-
+        user = User.query.filter_by(username=current_user.username).first()
+        if sensor.sensorAlarmValue > 0:
+            send_sensor_trigger_email(user, sensor)
         flash(_('Sensor has been updated successfully!'))
         return redirect(url_for('configuration'))
     return render_template('edit_sensor.html', form=form)
@@ -247,6 +249,9 @@ def addSensor():
         sensorAlarmValue=form.sensorAlarmValue.data, sensorClass=form.sensorClass.data)
         db.session.add(sensor)
         db.session.commit()
+        user = User.query.filter_by(username=current_user.username).first()
+        if sensor.sensorAlarmValue > 0:
+            send_sensor_trigger_email(user, sensor)
         flash(_('Your sensor has been added!'))
         return redirect(url_for('monitor'))
     return render_template('addSensor.html', title=_('Add Sensor'), form=form)

@@ -26,3 +26,12 @@ def send_password_reset_email(user):
                                          user=user, token=token),
                html_body=render_template('email/reset_password.html',
                                          user=user, token=token))
+
+def send_sensor_trigger_email(user, sensor):
+    send_email(_('[Microblog] Sensor has been triggered'),
+               sender=app.config['ADMINS'][0],
+               recipients=[user.email],
+               text_body=render_template('email/alarm_trigger.txt',
+                                         user=user, sensor=sensor),
+               html_body=render_template('email/alarm_trigger.html',
+                                         user=user, sensor=sensor))

@@ -1,0 +1,6 @@
+Dear {{ user.username }},
+
+Just letting you know that {{ sensor.sensorName }} has tripped.
+Sincerely,
+
+The Microblog Team
